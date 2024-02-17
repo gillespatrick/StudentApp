@@ -1,11 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.gilles.controller;
 
 import com.gilles.data.StudentData;
 import com.gilles.model.Student;
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import javax.sql.DataSource;
 
 
 /**
@@ -21,23 +20,50 @@ import java.util.List;
  */
 @WebServlet(name = "StudentServlet", urlPatterns = {"/students"})
 public class StudentServlet extends HttpServlet {
+    
+    @Resource(name="jdbc/api")
+    private DataSource source;
+    private StudentData studentData;
+
+    @Override
+    public void init() throws ServletException {
+        super.init(); 
+        
+        try{
+            studentData = new StudentData(source);
+        }
+        catch(Exception exc){
+            throw new ServletException(exc);
+        }
+    }
+    
+    
 
  
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Student> students = StudentData.getStudents();
-        
-        request.setAttribute("student_list", students);
-        
-        this.getServletContext().getRequestDispatcher("/WEB-INF/studentList.jsp").forward(request, response);
-    }
+        try {
+            listStudents(request,response);
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+        }
     
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
       
+    }
+
+    private void listStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    
+        List<Student> students =  studentData.getStudents();
+        request.setAttribute("student_list", students);
+         this.getServletContext().getRequestDispatcher("/WEB-INF/studentList.jsp").forward(request, response);
+   
+    
     }
 
 

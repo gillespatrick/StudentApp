@@ -1,12 +1,17 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.*,com.gilles.data.* ,com.gilles.model.*" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="~/../public/css/bootstrap.css" rel="stylesheet">
+        <link href="~/../public/css/bootstrap.css" rel="stylesheet" type="text/css">
         <title>List Student</title>
     </head>
+    <%
+        List<Student> theStudents = (List<Student>)request.getAttribute("student_list");
+    %>
     <body>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
@@ -29,10 +34,12 @@
         </nav><br><br>
 
     <center><h1>Students List</h1></center><br><br>
+    
+    
 
     <div class="container-fluid col-6">
-
-        <table class="table table-hover">
+       
+                <table class="table table-hover">
             <thead>
                 <tr>
 
@@ -41,19 +48,22 @@
                     <th scope="col">Email</th>
                 </tr>
             </thead>
-            <c:forEach var="tempStudent" items="${student_list}">
+            <% for (Student tempStudent : theStudents) {%>
                 <tbody>
                     <tr>
 
-                        <td>${tempStudent.firstName}</td>
-                        <td>${tempStudent.lastName}</td>
-                        <td>${tempStudent.email}</td>
+                        <td><%= tempStudent.getFirstName() %></td>
+                        <td><%= tempStudent.getLastName() %></td>
+                        <td><%= tempStudent.getEmail() %></td>
 
                     </tr>
-                </c:forEach>
+                
 
             </tbody>
+            <% } %>
         </table>
+        
+
     </div>
 </body>
 </html>
