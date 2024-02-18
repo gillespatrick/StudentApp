@@ -5,41 +5,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="~/../public/css/bootstrap.css" rel="stylesheet" type="text/css">
-        <title>List Student</title>
+      <title>List Student</title>
     </head>
     <%
         List<Student> theStudents = (List<Student>)request.getAttribute("student_list");
     %>
     <body>
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Student App Management</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarColor01">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Home
+       <jsp:include page="parts/header.jsp" />
 
-                            </a>
-                        </li>
+        <div class="container-fluid col-6 ">
+            <center><h1>Students List</h1><br><br>
+                <a href="addStudent" >
+                    <i class="fa-solid fa-user-plus"></i> Add Student</a><br>
+                   </center><br><br>
 
-                    </ul>
-
-                </div>
-            </div>
-        </nav><br><br>
-
-    <center><h1>Students List</h1></center><br><br>
-    
-    
-
-    <div class="container-fluid col-6">
-       
-                <table class="table table-hover">
+        <table class="table table-hover">
             <thead>
                 <tr>
 
@@ -49,20 +29,20 @@
                 </tr>
             </thead>
             <% for (Student tempStudent : theStudents) {%>
-                <tbody>
-                    <tr>
+            <tbody>
+                <tr>
 
-                        <td><%= tempStudent.getFirstName() %></td>
-                        <td><%= tempStudent.getLastName() %></td>
-                        <td><%= tempStudent.getEmail() %></td>
+                    <td><%= tempStudent.getFirstName() %></td>
+                    <td><%= tempStudent.getLastName() %></td>
+                    <td><%= tempStudent.getEmail() %></td>
 
-                    </tr>
-                
+                </tr>
+
 
             </tbody>
             <% } %>
         </table>
-        
+
 
     </div>
 </body>

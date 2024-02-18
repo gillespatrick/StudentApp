@@ -2,6 +2,7 @@ package com.gilles.data;
 
 import com.gilles.model.Student;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class StudentData {
         try {
             conn = source.getConnection();
             String sql = "select * from student order by last_name";
-           stat = conn.createStatement();
+            stat = conn.createStatement();
             result = stat.executeQuery(sql);
 
             while (result.next()) {
@@ -39,7 +40,7 @@ public class StudentData {
                 String lastName = result.getString("last_name");
                 String email = result.getString("email");
 
-                Student tempStudent = new Student(id,firstName, lastName, email);
+                Student tempStudent = new Student(id, firstName, lastName, email);
 
                 students.add(tempStudent);
             }
@@ -69,6 +70,30 @@ public class StudentData {
             e.printStackTrace();
         }
 
+    }
+
+    public void addStudent(Student student) throws Exception{
+        Connection conn = null;
+        PreparedStatement  myStat = null;
+        
+        try {
+            conn = source.getConnection();
+            
+            String sql = "insert into student"
+                    +"(first_name,last_name,email)"
+                    +"values(?,?,?)";
+            
+            myStat = conn.prepareStatement(sql);
+            
+            myStat.setString(1, student.getFirstName());
+            myStat.setString(2, student.getLastName());
+            myStat.setString(3, student.getEmail());
+            
+            myStat.execute();
+        } finally  {
+            close(conn, null, myStat);
+        }
+        
     }
 
 }
