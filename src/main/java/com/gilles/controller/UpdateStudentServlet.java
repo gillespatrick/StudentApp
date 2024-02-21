@@ -9,22 +9,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import javax.sql.DataSource;
-
 
 /**
  *
  * @author gilles
  */
-@WebServlet(name = "addStudent", urlPatterns = {"/addStudent"})
-public class AddStudent extends HttpServlet {
+@WebServlet(name = "updateStudent", urlPatterns = {"/updateStudent"})
+public class UpdateStudentServlet extends HttpServlet {
 
     @Resource(name = "jdbc/api")
     private DataSource source;
     private StudentData studentData;
-
-    @Override
+    
+     @Override
     public void init() throws ServletException {
         super.init();
 
@@ -35,42 +33,30 @@ public class AddStudent extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        this.getServletContext().getRequestDispatcher("/WEB-INF/studentForm.jsp").forward(request, response);
-
-    }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            addStudent(request, response);
+            updateStudent(request, response);
+           
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void addStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void updateStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        int id = Integer.parseInt(request.getParameter("id"));
+
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
 
-        Student student = new Student(firstName, lastName, email);
-
-        studentData.addStudent(student);
-
-        listStudents(request, response);
-
-     //   this.getServletContext().getRequestDispatcher("/WEB-INF/studentForm.jsp").forward(request, response);
-    }
-    
-        private void listStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        List<Student> students = studentData.getStudents();
-        request.setAttribute("student_list", students);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/studentList.jsp").forward(request, response);
+        Student theStudent = new Student(id, firstName, lastName, email);
+        studentData.updateStudent(theStudent);
+        response.sendRedirect("students");
 
     }
 

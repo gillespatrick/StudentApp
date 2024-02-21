@@ -1,3 +1,4 @@
+
 package com.gilles.controller;
 
 import com.gilles.data.StudentData;
@@ -9,15 +10,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import javax.sql.DataSource;
 
 /**
  *
  * @author gilles
  */
-@WebServlet(name = "students", urlPatterns = {"/students"})
-public class StudentServlet extends HttpServlet {
+@WebServlet(name = "editStudent", urlPatterns = {"/editStudent"})
+public class editStudentServlet extends HttpServlet {
 
     @Resource(name = "jdbc/api")
     private DataSource source;
@@ -38,22 +38,27 @@ public class StudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            listStudents(request, response);
-             } catch (Exception ex) {
+            loadStudent(request, response);
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+       // this.getServletContext().getRequestDispatcher("/WEB-INF/editStudent.jsp").forward(request, response);
     }
 
+   
 
-    private void listStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void loadStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String StudentId = request.getParameter("id");
 
-        List<Student> students = studentData.getStudents();
-        request.setAttribute("student_list", students);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/studentList.jsp").forward(request, response);
+        Student student = studentData.getStudent(StudentId);
+
+        request.setAttribute("the_student", student);
+
+        this.getServletContext().getRequestDispatcher("/WEB-INF/editStudent.jsp").forward(request, response);
 
     }
 
-
+   
 
 }

@@ -4,6 +4,7 @@ import com.gilles.model.Student;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
@@ -72,28 +73,108 @@ public class StudentData {
 
     }
 
-    public void addStudent(Student student) throws Exception{
+    public void addStudent(Student student) throws Exception {
         Connection conn = null;
-        PreparedStatement  myStat = null;
-        
+        PreparedStatement myStat = null;
+
         try {
             conn = source.getConnection();
-            
+
             String sql = "insert into student"
-                    +"(first_name,last_name,email)"
-                    +"values(?,?,?)";
-            
+                    + "(first_name,last_name,email)"
+                    + "values(?,?,?)";
+
             myStat = conn.prepareStatement(sql);
-            
+
             myStat.setString(1, student.getFirstName());
             myStat.setString(2, student.getLastName());
             myStat.setString(3, student.getEmail());
-            
+
             myStat.execute();
-        } finally  {
+        } finally {
             close(conn, null, myStat);
         }
-        
+
+    }
+
+    public Student getStudent(String theStudentId) throws Exception {
+
+        Student theStudent = null;
+        Connection conn = null;
+        PreparedStatement myStat = null;
+        ResultSet result = null;
+        //  int studentId;
+        int id;
+
+        try {
+            id = Integer.parseInt(theStudentId);
+
+            conn = source.getConnection();
+
+            String sql = "select * from student where id =?";
+            myStat = conn.prepareStatement(sql);
+            myStat.setInt(1, id);
+
+            result = myStat.executeQuery();
+
+            if (result.next()) {
+                String firstName = result.getString("first_name");
+                String lastName = result.getString("last_name");
+                String email = result.getString("email");
+
+                theStudent = new Student(id, firstName, lastName, email);
+            } else {
+                throw new Exception("The student with id " + id + " not found");
+            }
+
+            return theStudent;
+        } finally {
+            close(conn, result, myStat);
+        }
+    }
+
+    public void updateStudent(Student student) throws Exception {
+
+        Connection conn = null;
+        PreparedStatement myStat = null;
+        try {
+            conn = source.getConnection();
+
+            String sql = "update student set first_name=?, last_name=?, email=? where id=?;";
+            myStat = conn.prepareStatement(sql);
+
+            myStat.setString(1, student.getFirstName());
+            myStat.setString(2, student.getLastName());
+            myStat.setString(3, student.getEmail());
+            myStat.setInt(4, student.getId());
+
+            myStat.execute();
+        } finally {
+            close(conn, null, myStat);
+        }
+    }
+
+    public void deleteStudent(String StudentId) throws Exception {
+
+        Connection conn = null;
+        PreparedStatement myStat = null;
+
+        try {
+            int studentId = Integer.parseInt(StudentId);
+
+            conn = source.getConnection();
+
+            String sql = "delete from student where id = ?;";
+
+            myStat = conn.prepareStatement(sql);
+
+            myStat.setInt(1, studentId);
+            myStat.executeUpdate();
+        } finally {
+            close(conn, null, myStat);
+        }
+      
+
     }
 
 }

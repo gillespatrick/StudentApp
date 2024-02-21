@@ -7,9 +7,7 @@
     <head>
      <title>List Student</title>
     </head>
-    <%
-        List<Student> theStudents = (List<Student>)request.getAttribute("student_list");
-    %>
+   
     <body>
        
        <jsp:include page="parts/header.jsp" />
@@ -17,7 +15,7 @@
         <div class="container-fluid col-6 ">
             <center><h1>Student Registration</h1><br><br>
                 <a href="students" >
-                    <i class="fa-solid fa-backward"></i>   Back to  List</a><br>
+                    <i class="fa-solid fa-backward"></i> Back to  List</a><br>
             </center><br><br>
 
            <div class="container-fluid col-8">
