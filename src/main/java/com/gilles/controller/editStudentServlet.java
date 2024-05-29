@@ -42,8 +42,6 @@ public class editStudentServlet extends HttpServlet {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-       // this.getServletContext().getRequestDispatcher("/WEB-INF/editStudent.jsp").forward(request, response);
     }
 
    

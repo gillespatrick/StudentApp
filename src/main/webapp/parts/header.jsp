@@ -1,6 +1,4 @@
-
-<jsp:include page="link.jsp" />
-
+  <jsp:include page="link.jsp" />
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="home">Student App Management</a>
