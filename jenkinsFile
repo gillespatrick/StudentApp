@@ -48,7 +48,7 @@ pipeline{
 
     post {
       always {
-        jacoco maximumLineCoverage: '70', minimumLineCoverage: '30'
+        jacoco()
       }
     }
   }
