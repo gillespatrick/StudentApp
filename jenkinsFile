@@ -11,7 +11,7 @@ pipeline{
   stages {
   stage('codecompile') {
     steps {
-    git branch: 'main', url: 'https://github.com/gillespatrick/StudentApp'
+    git branch: 'main', url: 'https://github.com/lerndevops/samplejavaapp'
     sh 'mvn compile'
     }
 
