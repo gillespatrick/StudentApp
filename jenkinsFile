@@ -1,0 +1,66 @@
+pipeline{
+	agent any
+	tools {
+ 		 maven 'Maven'
+	}
+  
+  stages {
+  stage('codecompile') {
+    steps {
+    git branch: 'main', url: 'https://github.com/gillespatrick/StudentApp/'
+    sh 'mvn compile'
+    }
+
+     }
+
+  stage('codereview') {
+    steps {
+    sh 'mvn -P metrics pmd:pmd '
+    }
+
+    post {
+      always {
+        recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [pmdParser(pattern: '**/pmd.xml')]
+      }
+    }
+  }
+
+  stage('codetest') {
+    steps {
+      sh 'mvn test'
+      }
+
+    post {
+      always {
+       junit stdioRetention: '', testResults: 'target/surefire-reports/*.xml '
+       }
+    }
+  }
+
+  stage('codecoverage') {
+    steps {
+     sh 'mvn verify'
+    }
+
+    post {
+      always {
+        jacoco()
+      }
+    }
+  }
+
+  stage('codepackage') {
+    steps {
+      sh 'mvn package'
+    }
+
+    post {
+      always {
+        archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+      }
+    }
+  }
+
+}
+
+}

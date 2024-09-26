@@ -13,7 +13,7 @@
     <body>
         <jsp:include page="parts/header.jsp" />
 
-        <div class="container-fluid col-6 ">
+        <div class="container-fluid col-8 ">
             <center><h1>Students List</h1><br><br>
                 <a href="addStudent" >
                     <i class="fa-solid fa-user-plus"></i> Add Student</a><br>
